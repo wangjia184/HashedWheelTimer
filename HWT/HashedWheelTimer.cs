@@ -101,14 +101,14 @@ namespace HWT
             _wheel = CreateWheel(ticksPerWheel);
             _mask = _wheel.Length - 1;
 
-            // Convert tickDuration to nanos.
+            // Convert tickDuration to ms.
             this._tickDuration = (long)tickDuration.TotalMilliseconds;
 
             // Prevent overflow.
             if (this._tickDuration >= long.MaxValue / _wheel.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(tickDuration)
-                    , $"{tickDuration} (expected: 0 < tickDuration in nanos < {long.MaxValue / _wheel.Length}");
+                    , $"{tickDuration} (expected: 0 < tickDuration in ms < {long.MaxValue / _wheel.Length}");
             }
             _workerThread = new Thread(this.Run);
 
