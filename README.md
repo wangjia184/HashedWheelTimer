@@ -59,7 +59,7 @@ Install-Package HashedWheelTimer
 First create an instance of `HashedWheelTimer` class.
 
 Note that, each `HashedWheelTimer` instance creates a dedicated thread to watch the wheel. Hence, it is __strong recommanded__ to reuse `HashedWheelTimer` instance as much as possible.
-```
+```csharp
 using HWT;
 
 HashedWheelTimer timer = new HashedWheelTimer( tickDuration: TimeSpan.FromSeconds(1)
@@ -76,7 +76,7 @@ The constructor accepts the parameters below.
 
 Next, create a new class implementing `TimerTask` interface
 
-```
+```csharp
 class MyTimerTask : TimerTask
 {
     // This method is called when the task is expired.
@@ -94,7 +94,7 @@ class MyTimerTask : TimerTask
 ```
 
 Now we can schedual the task in 5 seconds later.
-```
+```csharp
 timer.NewTimeout(new MyTimerTask(), TimeSpan.FromSeconds(5));
 ```
 
