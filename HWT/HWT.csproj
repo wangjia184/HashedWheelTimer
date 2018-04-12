@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>HashedWheelTimer</AssemblyName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>EveryMatrix.Inc</Company>
+    <Authors>Jerry.Wang</Authors>
+    <Description>HashedWheelTimer implemented in C# and .Net Standard inspired by io.netty.util.HashedWheelTimer</Description>
+    <RootNamespace>HWT</RootNamespace>
+  </PropertyGroup>
+
+</Project>
