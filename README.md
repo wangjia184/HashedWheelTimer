@@ -44,3 +44,114 @@ The .NET Framework and .NET Core already provide a set of timers
 
 HashedWheelTimer is different as it is optimized for approximated I/O timeout scheduling. It provides __O(1) time complexity__ and cheap constant factors for the important operations of inserting or removing timers. It is a better choice in scenarios like more than ten thousands of active timers. 
 
+
+
+## Installation
+
+The package is available from NuGet
+```
+Install-Package HashedWheelTimer
+```
+
+
+## How to Use
+
+First create an instance of `HashedWheelTimer` class.
+
+Note that, each `HashedWheelTimer` instance creates a dedicated thread to watch the wheel. Hence, it is __strong recommanded__ to reuse `HashedWheelTimer` instance as much as possible.
+```
+using HWT;
+
+HashedWheelTimer timer = new HashedWheelTimer( tickDuration: TimeSpan.FromSeconds(1)
+                , ticksPerWheel: 100000
+                , maxPendingTimeouts: 0);
+```
+
+The constructor accepts the parameters below.
+
+* `tickDuration` As described with 'approximated', this timer does not execute the scheduled TimerTask on time. HashedWheelTimer, on every tick, will check if there are any TimerTasks behind the schedule and execute them. You can increase or decrease the accuracy of the execution timing by specifying smaller or larger tick duration in the constructor. In most network applications, I/O timeout does not need to be accurate.
+* `ticksPerWheel` HashedWheelTimer maintains a data structure called 'wheel'. To put simply, a wheel is a hash table of TimerTasks whose hash function is 'dead line of the task'. The default number of ticks per wheel (i.e. the size of the wheel) is 512. You could specify a larger value if you are going to schedule a lot of timeouts.
+* `maxPendingTimeouts` The maximum number of pending timeouts after which call to _NewTimeout()_ will result in InvalidOperationException being thrown. No maximum pending timeouts limit is assumed if this value is 0 or negative.
+
+
+Next, create a new class implementing `TimerTask` interface
+
+```
+class MyTimerTask : TimerTask
+{
+    // This method is called when the task is expired.
+    // It is fired via `Task.Run`, hence you'd better surround the code with try-catch
+    public void Run(Timeout timeout)
+    {
+        try
+        {
+            // ...
+        } catch(Exception){
+            // ...
+        }
+    }
+}
+```
+
+Now we can schedual the task in 5 seconds later.
+```
+timer.NewTimeout(new MyTimerTask(), TimeSpan.FromSeconds(5));
+```
+
+Note that all the methods are thread-safe. You don't need synchronization on accessing them.
+
+## A full example
+
+```csharp
+/// <summary>
+/// Task fired repeatedly
+/// </summary>
+class IntervalTimerTask : TimerTask
+{
+    public void Run(Timeout timeout)
+    {
+        Console.WriteLine($"IntervalTimerTask is fired at {DateTime.UtcNow.Ticks / 10000000L}");
+        timeout.Timer.NewTimeout(this, TimeSpan.FromSeconds(2));
+    }
+}
+
+/// <summary>
+/// Task only be fired for one time
+/// </summary>
+class OneTimeTask : TimerTask
+{
+    readonly string _userData;
+    public OneTimeTask(string data)
+    {
+        _userData = data;
+    }
+
+    public void Run(Timeout timeout)
+    {
+        Console.WriteLine($"{_userData} is fired at {DateTime.UtcNow.Ticks / 10000000L}");
+    }
+}
+
+
+static void Main(string[] args)
+{
+    HashedWheelTimer timer = new HashedWheelTimer( tickDuration: TimeSpan.FromSeconds(1)
+        , ticksPerWheel: 100000
+        , maxPendingTimeouts: 0);
+
+    timer.NewTimeout(new OneTimeTask("A"), TimeSpan.FromSeconds(5));
+    timer.NewTimeout(new OneTimeTask("B"), TimeSpan.FromSeconds(4));
+    var timeout = timer.NewTimeout(new OneTimeTask("C"), TimeSpan.FromSeconds(3));
+    timer.NewTimeout(new OneTimeTask("D"), TimeSpan.FromSeconds(2));
+    timer.NewTimeout(new OneTimeTask("E"), TimeSpan.FromSeconds(1));
+
+    timeout.Cancel();
+
+    timer.NewTimeout(new IntervalTimerTask(), TimeSpan.FromSeconds(5));
+    Console.WriteLine($"{DateTime.UtcNow.Ticks / 10000000L} : Started");
+    Console.ReadKey();
+}
+```
+
+The output of the sample is something like
+[]!(./console.png)
