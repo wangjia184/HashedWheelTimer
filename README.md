@@ -1,4 +1,4 @@
-# High Performance Timer for C#/.NET
+# High Performance Timer for .NET
 HashedWheelTimer implemented in C# inspired by io.netty.util.HashedWheelTimer
 
 ## What is Hashed Wheel Timer?
@@ -32,4 +32,15 @@ If you're a visual person, it might be useful for you to check out [these
 slides](http://www.cse.wustl.edu/~cdgill/courses/cs6874/TimingWheels.ppt),
 which help to understand the concept underlying the Hashed Wheel Timer better.
 
+## Why another Timer?
+
+The .NET Framework and .NET Core already provide a set of timers
+
+* `System.Timers.Timer`
+* `System.Threading.Timer`
+* `System.Windows.Forms.Timer`
+* `System.Web.UI.Timer`
+* `System.Windows.Threading.DispatcherTimer`
+
+HashedWheelTimer is optimized for approximated I/O timeout scheduling. It provides __O(1) time complexity__ and cheap constant factors for the important operations of inserting or removing timers.
 
