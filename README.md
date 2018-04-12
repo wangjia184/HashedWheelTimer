@@ -154,4 +154,4 @@ static void Main(string[] args)
 ```
 
 The output of the sample is something like
-[]!(./console.png)
+![](./console.png)
