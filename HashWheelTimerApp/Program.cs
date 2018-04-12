@@ -40,7 +40,7 @@ namespace HashWheelTimerApp
 
         static void Main(string[] args)
         {
-            HashedWheelTimer timer = new HashedWheelTimer( TimeSpan.FromSeconds(1), 5, 0);
+            HashedWheelTimer timer = new HashedWheelTimer( TimeSpan.FromSeconds(1), 100000, 0);
 
             timer.NewTimeout(new OneTimeTask("A"), TimeSpan.FromSeconds(5));
             timer.NewTimeout(new OneTimeTask("B"), TimeSpan.FromSeconds(4));
