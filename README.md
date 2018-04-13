@@ -98,7 +98,14 @@ Now we can schedual the task in 5 seconds later.
 timer.NewTimeout(new MyTimerTask(), TimeSpan.FromSeconds(5));
 ```
 
-Note that all the methods are thread-safe. You don't need synchronization on accessing them.
+Note that all the methods are __thread-safe__. You don't need synchronization on accessing them.
+
+
+If you are using TPL(Task Parallel Library) asynchronous programming, you may `await Task.Delay(milliseconds)` to continue some work after a while. Alternatively, it can be replaced with following code if you accept approximated delay.
+
+```csharp
+await timer.Delay(milliseconds)`
+```
 
 ## A full example
 

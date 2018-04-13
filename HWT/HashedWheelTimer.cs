@@ -382,5 +382,14 @@ namespace HWT
             }
         }
 
+        public TimedAwaiter Delay(long milliseconds)
+        {
+            TimedAwaiter awaiter = new TimedAwaiter();
+            this.NewTimeout(awaiter, TimeSpan.FromMilliseconds(milliseconds));
+            return awaiter;
+        }
+
+        
+
     }
 }

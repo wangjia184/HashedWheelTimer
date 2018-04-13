@@ -8,6 +8,7 @@
     <Authors>Jerry.Wang</Authors>
     <Description>HashedWheelTimer implemented in C# and .Net Standard inspired by io.netty.util.HashedWheelTimer</Description>
     <RootNamespace>HWT</RootNamespace>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>

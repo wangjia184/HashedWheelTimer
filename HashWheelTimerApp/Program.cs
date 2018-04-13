@@ -40,7 +40,9 @@ namespace HashWheelTimerApp
 
         static void Main(string[] args)
         {
-            HashedWheelTimer timer = new HashedWheelTimer( tickDuration: TimeSpan.FromSeconds(1)
+            Console.WriteLine($"{DateTime.UtcNow.Ticks / 10000000L} : Started");
+
+            HashedWheelTimer timer = new HashedWheelTimer( tickDuration: TimeSpan.FromMilliseconds(100)
                 , ticksPerWheel: 100000
                 , maxPendingTimeouts: 0);
 
@@ -53,8 +55,19 @@ namespace HashWheelTimerApp
             timeout.Cancel();
 
             timer.NewTimeout(new IntervalTimerTask(), TimeSpan.FromSeconds(5));
-            Console.WriteLine($"{DateTime.UtcNow.Ticks / 10000000L} : Started");
+
+
+            System.Threading.Thread.Sleep(7000);
+            TestDelay(timer);
+            
             Console.ReadKey();
+        }
+
+        static async void TestDelay(HashedWheelTimer timer)
+        {
+            Console.WriteLine($"Async Delay starts at {DateTime.UtcNow.Ticks / 10000000L}");
+            await timer.Delay(1000);
+            Console.WriteLine($"Async Delay ends at {DateTime.UtcNow.Ticks / 10000000L}");
         }
 
 
