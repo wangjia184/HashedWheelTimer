@@ -104,7 +104,7 @@ Note that all the methods are __thread-safe__. You don't need synchronization on
 If you are using TPL(Task Parallel Library) asynchronous programming, you may already use `await Task.Delay(milliseconds)` to continue some work after a while. Alternatively, it can be replaced with following code if approximated delay is acceptable.
 
 ```csharp
-await timer.Delay(milliseconds)`
+await timer.Delay(milliseconds)
 ```
 
 ## A full example
