@@ -101,7 +101,7 @@ timer.NewTimeout(new MyTimerTask(), TimeSpan.FromSeconds(5));
 Note that all the methods are __thread-safe__. You don't need synchronization on accessing them.
 
 
-If you are using TPL(Task Parallel Library) asynchronous programming, you may `await Task.Delay(milliseconds)` to continue some work after a while. Alternatively, it can be replaced with following code if you accept approximated delay.
+If you are using TPL(Task Parallel Library) asynchronous programming, you may already use `await Task.Delay(milliseconds)` to continue some work after a while. Alternatively, it can be replaced with following code if approximated delay is acceptable.
 
 ```csharp
 await timer.Delay(milliseconds)`
