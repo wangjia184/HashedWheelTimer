@@ -164,7 +164,7 @@ namespace HWT
                 case WORKER_STATE_STARTED:
                     break;
                 case WORKER_STATE_SHUTDOWN:
-                    throw new InvalidOperationException( nameof(HashedWheelTimer) + " cannot be started once stopped");
+                    return;
                 default:
                     throw new InvalidOperationException("HashedWheelTimer.workerState is invalid");
             }
@@ -195,6 +195,9 @@ namespace HWT
             {
                 throw new ArgumentNullException(nameof(task));
             }
+
+            if (_workerState == WORKER_STATE_SHUTDOWN)
+                return null;
 
             long pendingTimeoutsCount = Interlocked.Increment(ref _pendingTimeouts);
 
@@ -240,7 +243,7 @@ namespace HWT
                     _workerThread.Join(1000);
                 }
             }
-            finally
+            catch
             {
 
             }

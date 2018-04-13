@@ -61,6 +61,9 @@ namespace HashWheelTimerApp
             TestDelay(timer);
             
             Console.ReadKey();
+            timer.Stop();
+            Console.WriteLine($"{DateTime.UtcNow.Ticks / 10000000L} : Stopped");
+            Console.ReadKey();
         }
 
         static async void TestDelay(HashedWheelTimer timer)
