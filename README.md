@@ -42,7 +42,10 @@ The .NET Framework and .NET Core already provide a set of timers
 * `System.Web.UI.Timer`
 * `System.Windows.Threading.DispatcherTimer`
 
-HashedWheelTimer is different as it is optimized for approximated I/O timeout scheduling. It provides __O(1) time complexity__ and cheap constant factors for the important operations of inserting or removing timers. It is a better choice in scenarios like more than ten thousands of active timers. 
+HashedWheelTimer is different as it is optimized for approximated I/O timeout scheduling. It provides __O(1) time complexity__ and cheap constant factors for the important operations of inserting or removing timers. 
+
+Imagine a scenario, there are ten thousands of TCP connections and each of them has its own timer for rate limit or other functionalities. In this case HashedWheelTimer is a better choice.
+
 
 
 
